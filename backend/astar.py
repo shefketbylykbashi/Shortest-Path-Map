@@ -29,9 +29,33 @@ class Graph:
 
     #inplementimi i algoritmit astar per shortest path
     def astar(self):
-        return{}
+        dist = [-1 for i in self.node] 
+        pre  = [ i for i in range(len(self.node))] 
+        pq = [] # elementet : [0] => vlera totale A* ,[1] => distanca aktuale , [2] => indeksi destinacionit , [3] => indeksi i nyjes paraardhese
+
+        heapq.heappush(pq, (0, 0, self.idxStart, self.idxStart))
+        while (len(pq) > 0):
+            top = heapq.heappop(pq) 
+            if (dist[top[2]] == -1):  
+                dist[top[2]] = top[1] 
+                pre[top[2]] = top[3] 
+                if (top[2] == self.idxEnd): 
+                    break
+                for n in self.adj[top[2]]: 
+                    heapq.heappush(pq, (top[1] + n[1] + self.calcDist(self.idxEnd, n[0]), top[1] + n[1], n[0], top[2]))
+                   
+        last = self.idxEnd
+        route = [last]
+        while (last != self.idxStart): 
+            last = pre[last] 
+            route = [last] + route 
+        return {
+			'route': route,
+			'distance': dist[self.idxEnd]
+		}
+        
  
- 
+
 def receive(req):
 	g = Graph(
 		json.loads(req['node']),
