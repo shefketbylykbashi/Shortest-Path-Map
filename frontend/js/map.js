@@ -146,3 +146,18 @@ function addNode(location, map) {
 	  });
 	}
   }
+
+  function nextState() {
+	if(state == 'Node') {
+		$('#deleteButton').remove()
+		state = 'Edge';
+		$('#stateButton').val('Next: Define Start and End')
+		$('#cardContent').html('Click on 2 nodes to define the edge between those nodes of the graph')
+		$('#cardTitle').html('Add Edge')
+		google.maps.event.clearListeners(map, 'click')
+		for (let marker of markers) {
+			google.maps.event.clearListeners(marker, 'click')
+		}
+		addEdge()
+	}
+}
