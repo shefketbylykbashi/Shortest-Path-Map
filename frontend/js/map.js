@@ -148,16 +148,35 @@ function addNode(location, map) {
   }
 
   function nextState() {
-	if(state == 'Node') {
-		$('#deleteButton').remove()
-		state = 'Edge';
-		$('#stateButton').val('Next: Define Start and End')
-		$('#cardContent').html('Click on 2 nodes to define the edge between those nodes of the graph')
-		$('#cardTitle').html('Add Edge')
-		google.maps.event.clearListeners(map, 'click')
-		for (let marker of markers) {
-			google.maps.event.clearListeners(marker, 'click')
+		if(state == 'Node') {
+			$('#deleteButton').remove()
+			state = 'Edge';
+			$('#stateButton').val('Next: Define Start and End')
+			$('#cardContent').html('Click on 2 nodes to define the edge between those nodes of the graph')
+			$('#cardTitle').html('Add Edge')
+			google.maps.event.clearListeners(map, 'click')
+			for (let marker of markers) {
+				google.maps.event.clearListeners(marker, 'click')
+			}
+			addEdge()
+		}	else if (state == 'Edge') {
+			for (let marker of markers) {
+				google.maps.event.clearListeners(marker, 'click')
+			}
+			$('#cardTitle').html('Define your starting and end node')
+			$('#stateButton').val('Next: Calculate Route')
+			for (let marker of markers) {
+				google.maps.event.addListener(marker, 'click', (event) => {
+					//Change the marker icon
+					stfin.push(0 + marker.label - 1)
+					var icon = { 	scaledSize: new google.maps.Size(40,40) }
+					if (stfin.length == 1) {
+						$('#cardContent').html('Start Node: ' + (stfin[0] + 1))
+					} else if (stfin.length == 2) {
+						$('#cardContent').html('Start Node: ' + (stfin[0] + 1) + ' <br/> ' + 'Finish Node: ' + (stfin[1] + 1))
+					}
+				})
+			}
+			state = 'Calculate'
 		}
-		addEdge()
-	}
-}
+  	}
