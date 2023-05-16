@@ -13,11 +13,9 @@ class Graph:
         self.node = []  # lista e nyjeve
         self.adj = [[] for i in _node]  # krijimi i listes se fqinjesise per secilen nyje
         for n in _node:
-            self.node.append((n['lat'], n[
-                'lng']))  # mbushje e listes me te dhenat per nyjet , formati => [(gjersi,gjatesi), (gjeresia,gjatesi)...]
+            self.node.append((n['lat'], n['lng']))  # mbushje e listes me te dhenat per nyjet , formati => [(gjersi,gjatesi), (gjeresia,gjatesi)...]
         for e in _edge:
-            self.adj[e['a']].append((e['b'], self.calcDist(e['a'], e[
-                'b'])))  # mbushja e listes se fqinjesise me te dhena, formati [[per nyjen O: (destinacioni , pesha),()],[()]]
+            self.adj[e['a']].append((e['b'], self.calcDist(e['a'], e['b'])))  # mbushja e listes se fqinjesise me te dhena, formati [[per nyjen O: (destinacioni , pesha),()],[()]]
             self.adj[e['b']].append((e['a'], self.calcDist(e['a'], e['b'])))
         self.idxStart = _start
         self.idxEnd = _end
@@ -90,7 +88,7 @@ def receiveAStar(req):
         json.loads(req['edge']),
         json.loads(req['start']),
         json.loads(req['end'])
-    )  # responsi qe presim
+    )  # response qe presim
     return g.astar()
 
 
