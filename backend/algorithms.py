@@ -53,6 +53,34 @@ class Graph:
             'distance': dist[self.idxEnd]
         }
 
+    def dijkstra(self):
+        dist = [-1 for i in self.node]
+        pre = [i for i in range(len(self.node))]
+        pq = []
+        # elementet e pq (struktura):
+        #   [0] => distanca aktuale
+        #   [1] => indexi i destinacionit
+        #   [2] => indexi i nyjes paraprake
+        heapq.heappush(pq, (0, self.idxStart, self.idxStart))
+        while len(pq) > 0:
+            top = heapq.heappop(pq)
+            if dist[top[1]] == -1:
+                dist[top[1]] = top[0]
+                pre[top[1]] = top[2]
+                if top[1] == self.idxEnd:
+                    break
+                for n in self.adj[top[1]]:
+                    heapq.heappush(pq, (top[0] + n[1], n[0], top[1]))
+        last = self.idxEnd
+        route = [last]
+        while last != self.idxStart:
+            last = pre[last]
+            route = [last] + route
+        return {
+            'route': route,
+            'distance': dist[self.idxEnd]
+        }
+
 
 def receiveAStar(req):
     g = Graph(
