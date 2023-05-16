@@ -178,5 +178,21 @@ function addNode(location, map) {
 				})
 			}
 			state = 'Calculate'
-		}
+			}else if (state == 'Calculate') {
+				var algorithmSelect = document.getElementById("algorithm");
+				var selectedAlgorithm = algorithmSelect.value;
+				console.log(selectedAlgorithm);
+				if (selectedAlgorithm == 'astar'){
+				$.post({
+					type: 'POST',
+					url : 'http://localhost:5000/a-star',
+					data: {
+						node  : JSON.stringify(nodes),
+						edge  : JSON.stringify(edgeList),
+						start : stfin[0],
+						end   : stfin[1]
+					}				
+				})
   	}
+}
+}
