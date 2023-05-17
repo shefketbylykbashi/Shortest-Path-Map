@@ -178,7 +178,8 @@ function addNode(location, map) {
 				})
 			}
 			state = 'Calculate'
-			}else if (state == 'Calculate') {
+			}
+			else if (state == 'Calculate') {
 				var algorithmSelect = document.getElementById("algorithm");
 				var selectedAlgorithm = algorithmSelect.value;
 				console.log(selectedAlgorithm);
@@ -191,8 +192,29 @@ function addNode(location, map) {
 						edge  : JSON.stringify(edgeList),
 						start : stfin[0],
 						end   : stfin[1]
+					},
+					success: (data) => {
+						var route = ''
+						var shortestPath = []
+						console.log(data.distance)
+						for(var i = 0; i < data.route.length; i++) {
+							route += (data.route[i] + 1)
+							if(i != (data.route.length-1)) {
+								route += ' - '  
+							}
+							if(i == (data.route.length-1)) {
+								route += '<br> Distance: ' + data.distance
+							}
+							for(let marker of markers) {
+								if(data.route[i] == (marker.label-1)) {
+									shortestPath.push(marker.position)
+								}
+							}
+						}
+						$('#cardContent').html(route)
+						drawLine(shortestPath,map,'#0000FF')
 					}				
 				})
-  	}
-}
-}
+  	        }
+       }
+    }
