@@ -215,6 +215,40 @@ function addNode(location, map) {
 						drawLine(shortestPath,map,'#0000FF')
 					}				
 				})
+				$('#cardTitle').html('Shortest Path')}
+				else if (selectedAlgorithm == 'dijkstra'){
+					$.post({
+						type: 'POST',
+						url : 'http://localhost:5000/dijkstra',
+						data: {
+							node  : JSON.stringify(nodes),
+							edge  : JSON.stringify(edgeList),
+							start : stfin[0],
+							end   : stfin[1]
+						},
+						success: (data) => {
+							var route = ''
+							var shortestPath = []
+							console.log(data.distance)
+							for(var i = 0; i < data.route.length; i++) {
+								route += (data.route[i] + 1)
+								if(i != (data.route.length-1)) {
+									route += ' - '  
+								}
+								if(i == (data.route.length-1)) {
+									route += '<br> Distance: ' + data.distance
+								}
+								for(let marker of markers) {
+									if(data.route[i] == (marker.label-1)) {
+										shortestPath.push(marker.position)
+									}
+								}
+							}
+							$('#cardContent').html(route)
+							drawLine(shortestPath,map,'#0000FF')
+						}
+					})
+					$('#cardTitle').html('Shortest Path')
+				}
   	        }
        }
-    }
