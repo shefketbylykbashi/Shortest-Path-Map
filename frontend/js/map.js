@@ -1,6 +1,5 @@
 var map;
 var state = 'Node';
-function addNode()
 var nodes = [];
 var edge = [];
 var edgeList = [];
@@ -10,7 +9,6 @@ var markers = [];
 
 function initMap() {
 	var Prishtina ={lat: 42.667542, lng: 21.166191} 
-	
 	var noPoi = [
 		{
 			featureType: 'poi',
