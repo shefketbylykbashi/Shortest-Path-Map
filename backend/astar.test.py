@@ -1,7 +1,7 @@
-import astar
+import algorithms
 
 def main():
-	g = astar.Graph(
+	g = algorithms.Graph(
 		[
 			{ 'lat':  0, 'lng': 0 },
 			{ 'lat':  5, 'lng': 0 },
