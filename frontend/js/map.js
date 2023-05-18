@@ -129,21 +129,51 @@ function addNode(location, map) {
 	labelIndex = 1;
   }
   
-  function addEdge() {
-	for (let marker of markers) {
-	  google.maps.event.addListener(marker, "click", function (event) {
-		edge.push({ idx: 0 + marker.label - 1, latLng: marker.position });
-		if (edge.length == 1) {
-		  //edge[0].idx
-		} else if (edge.length == 2) {
-		  let path = [edge[0].latLng, edge[1].latLng];
-		  drawLine(path, map, "#FF0000");
-		  edgeList.push({ a: edge[0].idx, b: edge[1].idx });
-		  edge = [];
-		}
-	  });
-	}
-  }
+  function addEdge(){
+    for (let marker of markers ) {
+        google.maps.event.addListener(marker,'click', function(event) {
+            edge.push( { idx: 0 + marker.label - 1, latLng: marker.position })
+            if (edge.length == 1) {
+                //edge[0].idx
+            } else if (edge.length == 2) {
+                let path = [edge[0].latLng ,edge[1].latLng];
+                drawLine(path,map,'#FF0000');
+                
+                // Calculate the distance between the two markers using the Euclidean distance formula
+                const p1 = edge[0].latLng;
+                const p2 = edge[1].latLng;
+                const R = 6371; // Earth's radius in kilometers
+                const dLat = (p2.lat() - p1.lat()) * Math.PI / 180; // Difference in latitude in radians
+                const dLon = (p2.lng() - p1.lng()) * Math.PI / 180; // Difference in longitude in radians
+                const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(p1.lat() * Math.PI / 180) * Math.cos(p2.lat() * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); // Central angle between the two points in radians
+                const distance = R * c;
+                
+                // Add the edge to the edge list with the calculated distance
+                edgeList.push({a:edge[0].idx , b:edge[1].idx});
+                
+				// const middleLatLng = new google.maps.LatLng((p1.lat() + p2.lat()) / 2, (p1.lng() + p2.lng()) / 2);
+                // const marker = new google.maps.Marker({
+                //     position: middleLatLng,
+                //     map: map,
+					
+                //     label: distance.toFixed(2),
+                // });
+				const middleLatLng = new google.maps.LatLng((p1.lat() + p2.lat()) / 2, (p1.lng() + p2.lng()) / 2);
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `Edge distance: ${distance.toFixed(2)} km`,
+                    position: middleLatLng,
+                });
+                infoWindow.open(map);
+
+                // Display the distance in the console
+                //console.log(`Edge distance: ${distance} km`);
+                
+                edge = []
+            }
+        })
+    }
+}
 
   function nextState() {
 		if(state == 'Node') {
