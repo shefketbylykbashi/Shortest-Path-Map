@@ -140,14 +140,12 @@ function addNode(location, map) {
                 drawLine(path,map,'#FF0000');
                 
                 // Calculate the distance between the two markers using the Euclidean distance formula
-                const p1 = edge[0].latLng;
+				const p1 = edge[0].latLng;
                 const p2 = edge[1].latLng;
-                const R = 6371; // Earth's radius in kilometers
-                const dLat = (p2.lat() - p1.lat()) * Math.PI / 180; // Difference in latitude in radians
-                const dLon = (p2.lng() - p1.lng()) * Math.PI / 180; // Difference in longitude in radians
-                const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(p1.lat() * Math.PI / 180) * Math.cos(p2.lat() * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
-                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); // Central angle between the two points in radians
-                const distance = R * c;
+                const distance = 111 * Math.sqrt(
+                    Math.pow((p2.lat() - p1.lat()), 2) +
+                    Math.pow((p2.lng() - p1.lng()), 2)
+                );
                 
                 // Add the edge to the edge list with the calculated distance
                 edgeList.push({a:edge[0].idx , b:edge[1].idx});
